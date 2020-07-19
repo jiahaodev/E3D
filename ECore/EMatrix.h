@@ -24,7 +24,7 @@ namespace E3D
 			memset(m, 0, sizeof(EFloat) * 16);
 		}
 
-		EMatrix44(const EMatrix44& right)
+		EMatrix44(const EMatrix44 &right)
 		{
 			m[0][0] = right.m[0][0], m[0][1] = right.m[0][1], m[0][2] = right.m[0][2], m[0][3] = right.m[0][3];
 			m[1][0] = right.m[1][0], m[1][1] = right.m[1][1], m[1][2] = right.m[1][2], m[1][3] = right.m[1][3];
@@ -70,7 +70,7 @@ namespace E3D
 		}
 
 		//加法操作
-		inline EMatrix44 operator + (const EMatrix44& right)const
+		inline EMatrix44 operator + (const EMatrix44 &right)const
 		{
 			return EMatrix44(m[0][0] + right.m[0][0], m[0][1] + right.m[0][1], m[0][2] + right.m[0][2], m[0][3] + right.m[0][3],
 				m[1][0] + right.m[1][0], m[1][1] + right.m[1][1], m[1][2] + right.m[1][2], m[1][3] + right.m[1][3],
@@ -78,7 +78,7 @@ namespace E3D
 				m[3][0] + right.m[3][0], m[3][1] + right.m[3][1], m[3][2] + right.m[3][2], m[3][3] + right.m[3][3]);
 		}
 		//减法操作
-		inline EMatrix44 operator - (const EMatrix44& right)const
+		inline EMatrix44 operator - (const EMatrix44 &right)const
 		{
 			return EMatrix44(m[0][0] - right.m[0][0], m[0][1] - right.m[0][1], m[0][2] - right.m[0][2], m[0][3] - right.m[0][3],
 				m[1][0] - right.m[1][0], m[1][1] - right.m[1][1], m[1][2] - right.m[1][2], m[1][3] - right.m[1][3],
@@ -111,7 +111,7 @@ namespace E3D
 		}
 
 		//赋值
-		inline EMatrix44& operator = (const EMatrix44& right)
+		inline EMatrix44& operator = (const EMatrix44 &right)
 		{
 			m[0][0] = right.m[0][0], m[0][1] = right.m[0][1], m[0][2] = right.m[0][2], m[0][3] = right.m[0][3];
 			m[1][0] = right.m[1][0], m[1][1] = right.m[1][1], m[1][2] = right.m[1][2], m[1][3] = right.m[1][3];
@@ -121,7 +121,7 @@ namespace E3D
 		}
 
 		//是否相等
-		inline bool operator == (const EMatrix44& right) const
+		inline bool operator == (const EMatrix44 &right) const
 		{
 			if (m[0][0] != right.m[0][0] || m[0][1] != right.m[0][1] || m[0][2] != right.m[0][2] || m[0][3] != right.m[0][3]
 				|| m[1][0] != right.m[1][0] || m[1][1] != right.m[1][1] || m[1][2] != right.m[1][2] || m[1][3] != right.m[1][3]

@@ -5,7 +5,7 @@ namespace E3D
 {
 	std::ofstream *GLogStream = NULL;
 
-	bool InitLog(const EString& fileName) {
+	bool InitLog(const EString &fileName) {
 		if (GLogStream == NULL)
 		{
 			GLogStream = new std::ofstream();
@@ -17,7 +17,7 @@ namespace E3D
 		return true;
 	}
 
-	void Log(const EChar* string, ...)
+	void Log(const EChar *string, ...)
 	{
 		if (GLogStream == NULL)
 			return;

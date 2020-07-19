@@ -38,14 +38,14 @@ namespace E3D
 	typedef unsigned int EUInt;
 
 	//窗口大小
-	const EInt SCREEN_WDITH = 800;
+	const EInt SCREEN_WIDTH = 800;
 	const EInt SCREEN_HEIGHT = 600;
 
 	//默认的名称
 	const EString DEFAULT_NAME = "E3D_Default";
 
 	const EString DEFAULT_PATH = "Media/";
-	static EString GetPath(const EString& file) { return DEFAULT_PATH + file; }
+	static EString GetPath(const EString &file) { return DEFAULT_PATH + file; }
 
 	//数学常量
 #define PI 3.141592654f
