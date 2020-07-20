@@ -5,29 +5,34 @@
 #include "ELight.h"
 #include "EMaterial.h"
 
-
 namespace E3D
 {
+	
 
-#pragma region EVertex4D
-	EVertex4D::EVertex4D()
-		:x(0.0f), y(0.0f), z(0.0f), w(0.0f), u(0.0f), v(0.0f)
-	{}
+	EVertex4D::EVertex4D() : x(0.0f), y(0.0f), z(0.0f), w(1.0f),
+		u(0.0f), v(0.0f) {}
 
-	EVertex4D::EVertex4D(const EVector4D &v)
-		: x(v.x), y(v.y), z(v.z), w(v.w), u(0.0f), v(0.0f)
-	{}
+	
 
-	EVertex4D::EVertex4D(EFloat xf, EFloat yf, EFloat zf)
-		: x(xf), y(yf), z(zf), w(1), u(0.0f), v(0.0f)
-	{}
+	EVertex4D::EVertex4D(const EVector4D &v) : x(v.x), y(v.y), z(v.z), w(v.w),
 
-	EVertex4D EVertex4D::operator * (const EVector4D &right)
+		u(0.0f), v(0.0f) {}
+
+	
+
+	EVertex4D::EVertex4D(EFloat xf, EFloat yf, EFloat zf) :x(xf), y(yf), z(zf), w(1),
+		u(0.0f), v(0.0f) {}
+
+	
+
+	EVertex4D EVertex4D::operator *(const EVector4D &right)
 	{
 		EVertex4D temp = *this;
 		temp.x *= right.x, temp.y *= right.y, temp.z *= right.z;
 		return temp;
 	}
+
+	
 
 	EVertex4D EVertex4D::operator -(const EVertex4D &right)
 	{
@@ -36,12 +41,17 @@ namespace E3D
 		return temp;
 	}
 
+	
+
+
 	EVertex4D EVertex4D::operator +(const EVector4D &right)
 	{
 		EVertex4D temp = *this;
 		temp.x += right.x, temp.y += right.y, temp.z += right.z;
 		return temp;
 	}
+
+	
 
 	EVertex4D EVertex4D::operator +(const EVertex4D &right)
 	{
@@ -50,12 +60,16 @@ namespace E3D
 		return temp;
 	}
 
+	
+
 	EVertex4D EVertex4D::operator /(EFloat factor)
 	{
 		EVertex4D temp = *this;
 		temp.x /= factor, temp.y /= factor, temp.z /= factor;
 		return temp;
 	}
+
+	
 
 	EVertex4D& EVertex4D::operator =(const EVertex4D &right)
 	{
@@ -64,19 +78,22 @@ namespace E3D
 		return *this;
 	}
 
+	
+
 	EVector4D EVertex4D::toVector4D() const
 	{
 		return EVector4D(x, y, z, w);
 	}
 
-#pragma endregion
+	
 
-#pragma region EPlane3D
-	EPlane3D::EPlane3D(const EVector4D &p, const EVector4D &nor) :point(p)
+	EPlane3D::EPlane3D(const EVector4D &p, const EVector4D &nor) : point(p)
 	{
 		normal = nor;
 		normal.normalize();
 	}
+
+	
 
 	EPlane3D& EPlane3D::operator=(const EPlane3D &right)
 	{
@@ -84,29 +101,34 @@ namespace E3D
 		normal = right.normal;
 		return *this;
 	}
-#pragma endregion
 
-#pragma region EPolyon4D
+	
+
 	EPolyon4D::EPolyon4D() : state(0), attribute(0), color(0xffffff), verList(NULL) {}
 
-	EPolyonF4D::EPolyonF4D() : state(0), attribute(0), color(0xffffff)/*,pre(NULL), next(NULL)*/ {}
-#pragma endregion
+	
 
+	EPolyonF4D::EPolyonF4D() : state(0), attribute(0), color(0xffffff)/*,pre(NULL), next(NULL)*/ {}
+
+	
 
 	EObject4D::EObject4D() : nextObject(NULL), materialName(DEFAULT_NAME),
 		scale(1, 1, 1), direction(EVector4D::UNIT_X), needCull(true)
 	{}
 
-	void Transform_Object4D(EObject4D *object, const EMatrix44 &mat, OBJ_TRANSFORM_TYPE transformType /*, EBool transformBasis*/)
+	
+
+	void Transform_Object4D(EObject4D* object, const EMatrix44 &mat,
+		OBJ_TRANSFORM_TYPE tansformType/*, EBool transformBasis*/)
 	{
-		EObject4D *obj = object;
-		switch (transformType)
+		EObject4D* obj = object;
+		switch (tansformType)
 		{
 		case TRANSFORM_LOCAL:
 		{
 			while (obj)
 			{
-				//只对局部坐标进行转换
+				// 只对局部坐标进行变换
 				for (EInt i = 0; i < obj->vertexNumber; i++)
 				{
 					GetVertex4DMulMatrix44(obj->localList[i], mat, obj->localList[i]);
@@ -119,7 +141,7 @@ namespace E3D
 		{
 			while (obj)
 			{
-				//对变换后的坐标进行转换
+				// 对变换后的坐标进行变换
 				for (EInt i = 0; i < obj->vertexNumber; i++)
 				{
 					GetVertex4DMulMatrix44(obj->transformList[i], mat, obj->transformList[i]);
@@ -132,11 +154,12 @@ namespace E3D
 		{
 			while (obj)
 			{
-				//对变换后的坐标进行转换
+				// 将局部坐标变换后存储至变换后的坐标定点列表
 				for (EInt i = 0; i < obj->vertexNumber; i++)
 				{
 					GetVertex4DMulMatrix44(obj->localList[i], mat, obj->transformList[i]);
 				}
+
 				obj = obj->nextObject;
 			}
 		}
@@ -144,16 +167,21 @@ namespace E3D
 		}
 	}
 
-	void Transform_RenderList4D(ERenderList4D *renderList, const EMatrix44 &mat, OBJ_TRANSFORM_TYPE transformType)
+	
+
+	void Transform_Renderlist4D(ERenderList4D* renderList,
+		const EMatrix44 &mat, OBJ_TRANSFORM_TYPE transformType)
 	{
 		EPolyonF4D *poly = NULL;
 		switch (transformType)
 		{
 		case TRANSFORM_LOCAL:
 		{
-			for (ERenderList4D::Itr itr = renderList->polyData.begin(); itr != renderList->polyData.end(); ++itr)
+			for (ERenderList4D::Itr itr = renderList->polyData.begin();
+				itr != renderList->polyData.end(); ++itr)
 			{
 				poly = &(*itr);
+
 				GetVertex4DMulMatrix44(poly->localList[0], mat, poly->localList[0]);
 				GetVertex4DMulMatrix44(poly->localList[1], mat, poly->localList[1]);
 				GetVertex4DMulMatrix44(poly->localList[2], mat, poly->localList[2]);
@@ -162,7 +190,8 @@ namespace E3D
 		break;
 		case TRANSFORM_TRANS:
 		{
-			for (ERenderList4D::Itr itr = renderList->polyData.begin(); itr != renderList->polyData.end(); ++itr)
+			for (ERenderList4D::Itr itr = renderList->polyData.begin();
+				itr != renderList->polyData.end(); ++itr)
 			{
 				poly = &(*itr);
 				GetVertex4DMulMatrix44(poly->transformList[0], mat, poly->transformList[0]);
@@ -173,7 +202,8 @@ namespace E3D
 		break;
 		case TRANSFORM_LOCAL_TO_TRANS:
 		{
-			for (ERenderList4D::Itr itr = renderList->polyData.begin(); itr != renderList->polyData.end(); ++itr)
+			for (ERenderList4D::Itr itr = renderList->polyData.begin();
+				itr != renderList->polyData.end(); ++itr)
 			{
 				poly = &(*itr);
 				GetVertex4DMulMatrix44(poly->localList[0], mat, poly->transformList[0]);
@@ -185,19 +215,24 @@ namespace E3D
 		}
 	}
 
-	void Insert_Object4D_To_RenderList4D(ERenderList4D *renderList, EObject4D *object, OBJ_TRANSFORM_TYPE transformType, bool transformScaleAndPosition)
+	
+
+	void Insert_Object4D_To_RenderList4D(ERenderList4D *renderList, EObject4D *object,
+		OBJ_TRANSFORM_TYPE transformType, bool transformScaleAndPosition)
 	{
 		if (!object)
 			return;
 
-		EVector4D scale(1, 1, 1, 1);
+		EVector4D scale(1, 1, 1);
 		EVector4D pos(0, 0, 0);
 
-		if (transformScaleAndPosition) {
+		if (transformScaleAndPosition)
+		{
 			scale = object->scale;
 			pos = object->worldPosition;
 		}
-		//这里备份灯光的数据
+
+		// 这里备份灯光的数据
 		ELight *light = NULL;
 		for (LightItr itr = GLights->begin(); itr != GLights->end(); ++itr)
 		{
@@ -212,7 +247,6 @@ namespace E3D
 		switch (transformType)
 		{
 		case TRANSFORM_LOCAL:
-		{
 			while (obj)
 			{
 				for (EInt i = 0; i < obj->polyonNumber; i++)
@@ -226,41 +260,17 @@ namespace E3D
 					poly.localList[0] = obj->localList[base->verIndex[0]];
 					poly.localList[1] = obj->localList[base->verIndex[1]];
 					poly.localList[2] = obj->localList[base->verIndex[2]];
-					//设置材质
+
+					// 设置材质
 					poly.material = GetMaterial(obj->materialName);
 
 					renderList->polyData.push_back(poly);
 				}
+
 				obj = obj->nextObject;
 			}
-		}
-		break;
-		case TRANSFORM_TRANS:
-		{
-			while (obj)
-			{
-				for (EInt i = 0; i < obj->polyonNumber; i++)
-				{
-					base = &obj->polyonList[i];
-
-					poly.attribute = base->attribute;
-					poly.state = EPOLY_STATE_ACTIVE;
-					poly.color = base->color;
-
-					poly.transformList[0] = obj->transformList[base->verIndex[0]] * scale + pos;
-					poly.transformList[1] = obj->transformList[base->verIndex[1]] * scale + pos;
-					poly.transformList[2] = obj->transformList[base->verIndex[2]] * scale + pos;
-					//设置材质
-					poly.material = GetMaterial(obj->materialName);
-
-					renderList->polyData.push_back(poly);
-				}
-				obj = obj->nextObject;
-			}
-		}
-		break;
+			break;
 		case TRANSFORM_LOCAL_TO_TRANS:
-		{
 			while (obj)
 			{
 				for (EInt i = 0; i < obj->polyonNumber; i++)
@@ -274,24 +284,53 @@ namespace E3D
 					poly.transformList[0] = obj->localList[base->verIndex[0]] * scale + pos;
 					poly.transformList[1] = obj->localList[base->verIndex[1]] * scale + pos;
 					poly.transformList[2] = obj->localList[base->verIndex[2]] * scale + pos;
-					//设置材质
+
+					// 设置材质
 					poly.material = GetMaterial(obj->materialName);
 
 					renderList->polyData.push_back(poly);
 				}
+
 				obj = obj->nextObject;
 			}
+			break;
+		case TRANSFORM_TRANS:
+			while (obj)
+			{
+				for (EInt i = 0; i < obj->polyonNumber; i++)
+				{
+					base = &obj->polyonList[i];
+
+					poly.attribute = base->attribute;
+					poly.state = EPOLY_STATE_ACTIVE;
+					poly.color = base->color;
+
+					poly.transformList[0] = obj->transformList[base->verIndex[0]] * scale + pos;
+					poly.transformList[1] = obj->transformList[base->verIndex[1]] * scale + pos;
+					poly.transformList[2] = obj->transformList[base->verIndex[2]] * scale + pos;
+
+					// 设置材质
+					poly.material = GetMaterial(obj->materialName);
+
+					renderList->polyData.push_back(poly);
+				}
+
+				obj = obj->nextObject;
+			}
+			break;
 		}
-		break;
-		}
+
+
 	}
 
-	void Local_To_World_Object4D(EObject4D* object, OBJ_TRANSFORM_TYPE transformType /* = TRANSFORM_LOCAL_TO_TRANS */)
+	
+
+	void Local_To_World_Object4D(EObject4D* object, OBJ_TRANSFORM_TYPE transformType)
 	{
 		if (!object)
 			return;
 
-		EObject4D *obj = object;
+		EObject4D* obj = object;
 		EVector4D pos = obj->worldPosition;
 		if (TRANSFORM_LOCAL_TO_TRANS == transformType)
 		{
@@ -299,10 +338,12 @@ namespace E3D
 			{
 				for (EInt i = 0; i < obj->vertexNumber; i++)
 				{
+					// 设置顶点的缩放值,不再保留坐标设置
 					GetVertex4DAddVector4D(obj->localList[i] * obj->scale, pos, obj->transformList[i]);
 				}
 				obj = obj->nextObject;
 			}
+
 		}
 		else if (TRANSFORM_TRANS == transformType)
 		{
@@ -317,36 +358,31 @@ namespace E3D
 		}
 	}
 
-	void Local_To_World_RenderList4D(ERenderList4D *renderList, const EVector4D &pos, OBJ_TRANSFORM_TYPE transformType /* = TRANSFORM_LOCAL_TO_TRANS */)
+	
+
+	void Local_To_World_RenderList4D(ERenderList4D *renderList,
+		const EVector4D &pos, OBJ_TRANSFORM_TYPE transformType)
 	{
 		EPolyonF4D *poly = NULL;
 		switch (transformType)
 		{
 		case TRANSFORM_LOCAL:
 		{
-			for (ERenderList4D::Itr itr = renderList->polyData.begin(); itr != renderList->polyData.end(); ++itr)
+			for (ERenderList4D::Itr itr = renderList->polyData.begin();
+				itr != renderList->polyData.end(); ++itr)
 			{
 				poly = &(*itr);
+
 				GetVertex4DAddVector4D(poly->localList[0], pos, poly->localList[0]);
 				GetVertex4DAddVector4D(poly->localList[1], pos, poly->localList[1]);
 				GetVertex4DAddVector4D(poly->localList[2], pos, poly->localList[2]);
 			}
 		}
 		break;
-		case TRANSFORM_TRANS:
-		{
-			for (ERenderList4D::Itr itr = renderList->polyData.begin(); itr != renderList->polyData.end(); ++itr)
-			{
-				poly = &(*itr);
-				GetVertex4DAddVector4D(poly->transformList[0], pos, poly->transformList[0]);
-				GetVertex4DAddVector4D(poly->transformList[1], pos, poly->transformList[1]);
-				GetVertex4DAddVector4D(poly->transformList[2], pos, poly->transformList[2]);
-			}
-		}
-		break;
 		case TRANSFORM_LOCAL_TO_TRANS:
 		{
-			for (ERenderList4D::Itr itr = renderList->polyData.begin(); itr != renderList->polyData.end(); ++itr)
+			for (ERenderList4D::Itr itr = renderList->polyData.begin();
+				itr != renderList->polyData.end(); ++itr)
 			{
 				poly = &(*itr);
 				GetVertex4DAddVector4D(poly->localList[0], pos, poly->transformList[0]);
@@ -355,9 +391,79 @@ namespace E3D
 			}
 		}
 		break;
+		case TRANSFORM_TRANS:
+		{
+			for (ERenderList4D::Itr itr = renderList->polyData.begin();
+				itr != renderList->polyData.end(); ++itr)
+			{
+				poly = &(*itr);
+				GetVertex4DAddVector4D(poly->transformList[0], pos, poly->transformList[0]);
+				GetVertex4DAddVector4D(poly->transformList[1], pos, poly->transformList[1]);
+				GetVertex4DAddVector4D(poly->transformList[2], pos, poly->transformList[2]);
+			}
+		}
+		break;
 		}
 	}
 
+	
+
+	bool Cull_Object4D(EObject4D *object, EFrustum *camera, CULL_TYPE cullType)
+	{
+		if (!object)
+			return true;
+
+		if (!object->needCull)
+			return false;
+
+		// 先把当前物体的坐标变换成摄像机坐标系下
+		EVector4D centerPos;
+		GetVector4DMulMatrix44(object->worldPosition, camera->mWorldToCamera, centerPos);
+
+		// 首先把半径进行缩放
+		EFloat scaleRadiusZ;
+		EFloat scaleRadiusX;
+		EFloat scaleRadiusY;
+
+		if (cullType == CULL_SPHERE)
+		{
+			scaleRadiusZ = object->maxRadius * object->scale.z;
+			scaleRadiusX = object->maxRadius * object->scale.x;
+			scaleRadiusY = object->maxRadius * object->scale.y;
+		}
+		else if (cullType == CULL_BOX)
+		{
+			// 各剔除偏移以模型做大顶点的各值为基准
+			scaleRadiusZ = object->maxBoundingBox.z * object->scale.z;
+			scaleRadiusX = object->maxBoundingBox.x * object->scale.x;
+			scaleRadiusY = object->maxBoundingBox.y * object->scale.y;
+		}
+		else
+			return true;
+
+		// 远近面剔除
+		if ((centerPos.z + scaleRadiusZ) < camera->clip_z_near ||
+			(centerPos.z - scaleRadiusZ) > camera->clip_z_far)
+			return true;
+
+		// 左右面剔除
+		// 这里的测试是基于在xz平面的投影来计算的
+		EFloat x_test = 0.5f * camera->viewplane_width * centerPos.z / camera->view_dist;
+		if ((centerPos.x - scaleRadiusX) > x_test ||
+			(centerPos.x + scaleRadiusX) < -x_test)
+			return true;
+
+		// 上下面剔除
+		// 这里的测试是基于在zy平面的投影来计算的
+		EFloat y_test = 0.5f * camera->viewplane_height * centerPos.z / camera->view_dist;
+		if ((centerPos.y - scaleRadiusY) > y_test ||
+			(centerPos.y + scaleRadiusY) < -y_test)
+			return true;
+
+		return false;
+	}
+
+	
 
 	void World_To_Camera_Object4D(EObject4D *object, EFrustum *camera)
 	{
@@ -372,11 +478,13 @@ namespace E3D
 		}
 	}
 
+	
+
 	void World_To_Camera_RenderList4D(ERenderList4D *renderList, EFrustum *camera)
 	{
-		// 这里对灯关位置进行变换，将其变换到摄像机坐标系下
+		// 这里对灯光位置进行变换, 将其变换到摄像机坐标系下面
 		EMatrix44 mat = camera->mWorldToCamera;
-		//这里只保留旋转变换，而不进行平移变换，否则会出现灯光跟随摄像机移动的效果
+		// 这里只保留旋转变换, 而不进行平移变换, 否则会出现灯光跟随摄像机移动的效果
 		mat.m[3][0] = mat.m[3][1] = mat.m[3][2] = 0;
 
 		ELight *light = NULL;
@@ -388,278 +496,88 @@ namespace E3D
 		}
 
 		EPolyonF4D *poly = NULL;
-		for (ERenderList4D::Itr itr = renderList->polyData.begin(); itr != renderList->polyData.end(); ++itr)
-		{
-			poly = &(*(itr));
-			GetVertex4DMulMatrix44(poly->transformList[0], camera->mWorldToCamera, poly->transformList[0]);
-			GetVertex4DMulMatrix44(poly->transformList[1], camera->mWorldToCamera, poly->transformList[1]);
-			GetVertex4DMulMatrix44(poly->transformList[2], camera->mWorldToCamera, poly->transformList[2]);
-		}
-	}
-
-
-	void Camera_To_Perspective_Object4D(EObject4D *object, EFrustum *camera)
-	{
-		if (!object)
-			return;
-		EObject4D *obj = NULL;
-		EFloat d = camera->view_dist;
-		EFloat temp = 0;
-
-		while (obj)
-		{
-			for (EInt i = 0; i < obj->vertexNumber; i++)
-			{
-				temp = d / obj->transformList[i].z;
-				//变换X、Y轴，Z轴不变换
-				obj->transformList[i].x = temp * obj->transformList[i].x;
-				obj->transformList[i].y = camera->aspect_ratio * temp * obj->transformList[i].y;
-			}
-			obj = obj->nextObject;
-		}
-	}
-
-
-	void Camera_To_Perspective_RenderList4D(ERenderList4D *renderList, EFrustum *camera)
-	{
-		EFloat d = camera->view_dist;
-		EFloat temp = 0;
-		EPolyonF4D *poly = NULL;
 		for (ERenderList4D::Itr itr = renderList->polyData.begin();
 			itr != renderList->polyData.end(); ++itr)
 		{
 			poly = &(*itr);
-			for (EInt i = 0; i < 3; i++)
-			{
-				temp = d / poly->transformList[i].z;
-				poly->transformList[i].x = temp * poly->transformList[i].x;
-				poly->transformList[i].y = camera->aspect_ratio * temp * poly->transformList[i].y;
-			}
-		}
-	}
 
-	void Perspective_To_Screen_Object4D(EObject4D *object, EFrustum *camera)
-	{
-		if (!object)
-			return;
 
-		EFloat XOffset = 0.5f * (camera->viewplane_width - 1);
-		EFloat YOffset = 0.5f * (camera->viewplane_height - 1);
-
-		EObject4D *obj = object;
-		while (obj)
-		{
-			for (EInt i = 0; i < obj->vertexNumber; i++)
-			{
-				//在这里，x、y已经被归一化为[-1,1]的范围之内
-				obj->transformList[i].x = XOffset * (1 + obj->transformList[i].x);
-				obj->transformList[i].y = YOffset * (1 - obj->transformList[i].y);
-			}
-			obj = obj->nextObject;
-		}
-	}
-
-	void Perspective_To_Screen_RenderList4D(ERenderList4D *renderList, EFrustum *camera)
-	{
-		EFloat XOffset = 0.5f * (camera->viewplane_width - 1);
-		EFloat YOffset = 0.5f * (camera->viewplane_height - 1);
-
-		EPolyonF4D *poly = NULL;
-		for (ERenderList4D::Itr itr = renderList->polyData.begin(); itr != renderList->polyData.end(); ++itr)
-		{
-			poly = &(*itr);
-			for (EInt i = 0; i < 3; i++)
-			{
-				poly->transformList[i].x = XOffset * (1 + poly->transformList[i].x);
-				poly->transformList[i].y = YOffset * (1 - poly->transformList[i].y);
-			}
-		}
-	}
-
-	void World_To_Screen_RenderList4D(ERenderList4D *renderList, EFrustum *camera)
-	{
-		EFloat XOffset = 0.5f * (camera->viewplane_width - 1);
-		EFloat YOffset = 0.5f * (camera->viewplane_height - 1);
-		EFloat dist = camera->view_dist;
-		EFloat temp = 0;
-
-		// 这里对灯光位置进行变换, 将其变换到摄像机坐标系下面
-		EMatrix44 mat = camera->mWorldToCamera;
-		// 这里只保留旋转变换, 而不进行平移变换, 否则会出现灯光跟随摄像机移动的效果
-		mat.m[3][0] = mat.m[3][1] = mat.m[3][2] = 0.0f; mat.m[3][3] = 1.0f;
-
-		ELight *light = NULL;
-		for (LightItr itr = GLights->begin(); itr != GLights->end(); ++itr)
-		{
-			light = *itr;
-			GetVector4DMulMatrix44(light->position, mat, light->transPosition);
-			GetVector4DMulMatrix44(light->direction, mat, light->transDirection);
-		}
-
-		EPolyonF4D *poly = NULL;
-		for (ERenderList4D::Itr itr = renderList->polyData.begin();
-			itr != renderList->polyData.end();)
-		{
-			poly = &(*itr);
-			//首先进行背面消除
-			if (Remove_Backface(poly, camera))
-			{
-				renderList->polyData.erase(itr++);
-				continue;
-			}
-			//世界坐标 变 摄像机坐标
 			GetVertex4DMulMatrix44(poly->transformList[0], camera->mWorldToCamera, poly->transformList[0]);
 			GetVertex4DMulMatrix44(poly->transformList[1], camera->mWorldToCamera, poly->transformList[1]);
 			GetVertex4DMulMatrix44(poly->transformList[2], camera->mWorldToCamera, poly->transformList[2]);
-
-			//进行裁剪
-			if (isClipped(poly, camera->clip_z_near, camera->clip_z_far) ||
-				isClipped(poly, camera->clip_plane_L) ||
-				isClipped(poly, camera->clip_plane_R) ||
-				isClipped(poly, camera->clip_plane_T) ||
-				isClipped(poly, camera->clip_plane_B))
-			{
-				renderList->polyData.erase(itr++);
-				continue;
-			}
-
-			//如果 未被裁剪  且 不是背面， 则进行光照计算
-			Light_PolyonF4D(poly, camera);
-
-			//之后执行接下来的变换
-			for (EInt i = 0; i < 3; i++)
-			{
-				// 世界坐标变射线机坐标
-				//GetVertex4DMulMatrix44(poly->transformList[i], camera->mWorldToCamera, poly->transformList[i]);
-
-				// 透视变换
-				temp = dist / poly->transformList[i].z;
-				poly->transformList[i].x = temp * poly->transformList[i].x;
-				poly->transformList[i].y = camera->aspect_ratio * temp * poly->transformList[i].y;
-
-				// 屏幕变换
-				poly->transformList[i].x = XOffset * (1 + poly->transformList[i].x);
-				poly->transformList[i].y = XOffset * (1 - poly->transformList[i].y);
-			}
-
-			++itr;
 		}
-
-		//在摄像机坐标系中对渲染列表的多变性进行深度排序
-		//这里基于这样一个事实，即使 X,Y 坐标发生了变化，但是Z坐标依旧是之前摄像机坐标系下的Z值
-		Sort_RenderList4D(renderList);
 	}
 
-
-
-	bool Cull_Object4D(EObject4D *object, EFrustum *camera, CULL_TYPE cullType)
-	{
-		if (!object)
-			return true;
-		if (!object->needCull)
-			return false;
-		//先把当前物体的坐标变换成摄像机坐标系下
-		EVector4D centerPos;
-		GetVector4DMulMatrix44(object->worldPosition, camera->mWorldToCamera, centerPos);
-
-		//首先吧半径进行缩放
-		EFloat scaleRadiusZ;
-		EFloat scaleRadiusX;
-		EFloat scaleRadiusY;
-
-		if (cullType == CULL_SPHERE)
-		{
-			scaleRadiusZ = object->maxRadius * object->scale.z;
-			scaleRadiusX = object->maxRadius * object->scale.x;
-			scaleRadiusY = object->maxRadius * object->scale.y;
-		}
-		else if (cullType == CULL_SPHERE)
-		{
-			//各剔除以模型最大顶点的各值为基准
-			scaleRadiusZ = object->maxBoundingBox.z * object->scale.z;
-			scaleRadiusX = object->maxBoundingBox.x * object->scale.x;
-			scaleRadiusY = object->maxBoundingBox.y * object->scale.y;
-		}
-		else
-			return true;
-
-		//远近面剔除
-		if ((centerPos.z + scaleRadiusZ < camera->clip_z_near || (centerPos.z - scaleRadiusZ) > camera->clip_z_far))
-			return true;
-
-		//左右面剔除
-		//这里的测试是基于在xz平面的投影来计算的
-		EFloat x_test = 0.5f * camera->viewplane_width * centerPos.z / camera->view_dist;
-		if ((centerPos.x - scaleRadiusX) > x_test || (centerPos.x + scaleRadiusX) < -x_test)
-			return true;
-
-		//上下面剔除
-		//这里的测试是基于在zy平面的投影来计算的
-		EFloat y_test = 0.5f * camera->viewplane_height * centerPos.z / camera->view_dist;
-		if ((centerPos.y - scaleRadiusY) > y_test || (centerPos.y + scaleRadiusY) < -y_test)
-			return true;
-
-		return false;
-	}
-
+	
 
 	void Sort_RenderList4D(ERenderList4D *renderList)
 	{
-		//这里对对变形列表进行深度排序（画家算法）
+		// 这里对多边形列表进行深度排序(画家算法)
 		renderList->polyData.sort(CompEPolyonF4D());
+
 	}
 
-	// 顶点索引
+	
+
 	bool Remove_Backface(EPolyon4D *poly, EFrustum *camera)
 	{
+
+
 		EInt index0 = poly->verIndex[0];
 		EInt index1 = poly->verIndex[1];
 		EInt index2 = poly->verIndex[2];
 
-		//这里使用变换后的多边形顶点列表，因为背面消除只能在顶点被变换为世界坐标之后才能进行
-		//这里一般在摄像机坐标系内对其进行背面消除
-		// 顶点是按照 顺时针方向排列的 u = p0->p1, v = p0->p2 , n = u X v
+		// 这里使用变换后的多边形定点列表, 因为背面消除只能在定点被变换未世界坐标之后才能进行
+		// 而我在这里一般在摄像机坐标系内对其进行背面消除
+		// 顶点时按顺时针方向排列的 u = p0->p1 v = p0->p2 n = uXv
 		EVector4D u = (poly->verList->at(index0) - poly->verList->at(index1)).toVector4D();
 		EVector4D v = (poly->verList->at(index0) - poly->verList->at(index2)).toVector4D();
 
-		//多边形法线
+		// 多边形法线
 		EVector4D n = u.crossProduct(v);
 		EVector4D view = camera->position - poly->verList->at(index0).toVector4D();
 
-		// 求得两向量的点积，如果小于0，那么认为这个面背朝摄像机，不予显示
+		// 求得两向量的点积, 如果小于0， 那么认为这个面背朝摄像机, 不予显示
 		EFloat dot = n.dotProduct(view);
 		if (dot < 0.0f)
 		{
 			poly->state |= EPOLY_STATE_BACKFACE;
 			return true;
 		}
+
 		return false;
 	}
 
-	//顶点
+	
+
 	bool Remove_Backface(EPolyonF4D *poly, EFrustum *camera)
 	{
-		if (!(poly->state & EPOLY_STATE_ACTIVE)
-			|| (poly->state & EPOLY_STATE_BACKFACE)
-			|| (poly->state & EPOLY_STATE_CLIPPED))
+		if (!(poly->state & EPOLY_STATE_ACTIVE) ||
+			(poly->state & EPOLY_STATE_BACKFACE) ||
+			(poly->state & EPOLY_STATE_CLIPPED))
 			return true;
-		//这里使用变换后的多边形顶点列表，因为背面消除只能在顶点被变换为世界坐标之后才能进行
-		//这里一般在摄像机坐标系内对其进行背面消除
-		// 顶点是按照 顺时针方向排列的 u = p0->p1, v = p0->p2 , n = u X v
+
+		// 这里使用变换后的多边形定点列表, 因为背面消除只能在定点被变换未世界坐标之后才能进行
+		// 而我在这里一般在摄像机坐标系内对其进行背面消除
+		// 顶点时按顺时针方向排列的 u = p0->p1 v = p0->p2 n = uXv
 		EVector4D u = (poly->transformList[0] - poly->transformList[1]).toVector4D();
 		EVector4D v = (poly->transformList[0] - poly->transformList[2]).toVector4D();
 
 		EVector4D n = u.crossProduct(v);
 		EVector4D view = camera->position - poly->transformList[0].toVector4D();
 
+		// TODO
 		EFloat dot = n.dotProduct(view);
 		if (dot < 0)
 		{
 			poly->state |= EPOLY_STATE_BACKFACE;
 			return true;
 		}
+
 		return false;
 	}
+
+	
 
 	void Remove_Backface_Object4D(EObject4D *object, EFrustum *camera)
 	{
@@ -667,78 +585,90 @@ namespace E3D
 		EPolyon4D *poly = NULL;
 		while (obj)
 		{
-			//物体没有被剔除
+			// 物体没有被剔除
 			if (!(obj->state & EOBJECT_STATE_CULLED))
 			{
 				for (EInt i = 0; i < obj->polyonNumber; i++)
 				{
 					poly = &obj->polyonList[i];
 					Remove_Backface(poly, camera);
+
 				}
 			}
+
 			obj = obj->nextObject;
 		}
 	}
 
+	
+
 	void Remove_Backface_RenderList4D(ERenderList4D *renderList, EFrustum *camera)
 	{
 		EPolyonF4D *poly = NULL;
+
 		for (ERenderList4D::Itr itr = renderList->polyData.begin();
 			itr != renderList->polyData.end();)
 		{
 			poly = &(*itr);
+
 			// 这里移除不可见的多边形
-			// 这样在RenderList之后的操作中，不需要判断当前多边形是否可见
+			// 这样在RenderList之后的操作中不需要判断当前多边形是否可见
 			if (Remove_Backface(poly, camera))
 				renderList->polyData.erase(itr++);
 			else
+			{
 				++itr;
+			}
+
 		}
 	}
 
+	
 
 	void Light_PolyonF4D(EPolyonF4D *poly, EFrustum *camera)
 	{
+
+
 		EBool lightOn = false;
 		EColor baseColor(poly->color);
 
-		//这里使用了EInt类型 而没有使用 EColor 类型，原因是后面要进行颜色的累加
-		//使用unsigned char 可能会导致溢出，从而导致显示不正常
+		// 这里使用了Eint类型而没有使用EColor类型, 原因是后面要进行颜色的累加
+		// 使用unsigned char可能会导致溢出, 从而导致显示不正常
+		EInt sumColorR = 0, sumColorG = 0, sumColorB = 0;	// 全部颜色总和
 
-		EInt sumColorR = 0, sumColorG = 0, sumColorB = 0;
 		// 顶点按照顺时针方向排序, 因此u=p0->p1 v=p0->p2 n = uXv
 		EVector4D u = (poly->transformList[0] - poly->transformList[1]).toVector4D();
 		EVector4D v = (poly->transformList[0] - poly->transformList[2]).toVector4D();
 		EVector4D n = u.crossProduct(v);
-		//法线长度
+		// 法线长度
 		EFloat length = n.length();
 
 		ELight *light = NULL;
 		for (LightItr itr = GLights->begin(); itr != GLights->end(); ++itr)
 		{
 			light = *itr;
-			//灯关关闭则不处理
+			// 灯光关闭则不处理
 			if (!light->lightOn)
 				continue;
 
 			lightOn = true;
-			//环境光
+			// 环境光
 			if (light->lightType == LIGHT_AMBIENT)
 			{
-				// 将每个分量与多边形颜色相乘，并除以256，确保结果在0~255之间
+				// 将每个分量与多边形颜色相乘, 并除以256， 确保结果在0~255之间
 				sumColorR += light->ambient.r * baseColor.r >> 8;
 				sumColorG += light->ambient.g * baseColor.g >> 8;
 				sumColorB += light->ambient.b * baseColor.b >> 8;
 			}
-			//平行光
+			// 平行光
 			else if (light->lightType == LIGHT_DIRECTION)
 			{
-				//无穷远灯关，因此需要知道 法线 与 光源方向
-				//这里使用灯光方向的“逆方向”作为与面法线夹角 的向量
-				//这样当夹角小于90时，其点击大于零
+				// 无穷远灯光, 因此需要知道面发现和光源方向
+				// 这里使用灯光方向的逆方向作为与面发现夹角的向量, 
+				// 这样当夹角小于90时, 其点积大于零
 				EFloat dot = n.dotProduct(-light->transDirection);
 
-				//平行光光照模型
+				// 平行光光照模型
 				// I(d)dir = IOdir * Cldir
 				// 散射光的计算公式
 				// Itotal = Rsdiffuse * Idiffuse * (n * l)
@@ -746,8 +676,10 @@ namespace E3D
 				if (dot > 0.0f)
 				{
 					EFloat dirLeng = light->transDirection.length();
-					//接收光照的强度，多边形法线与光照方向夹角越小，那么其接收强度越大
-					//夹角越大，接收强度越小，多边形越暗
+
+
+					// 接收光照的强度, 多边形法线与光照方向的夹角越小, 那么其接收强度越大
+					// 夹角越大, 接收强度越小, 多边形越暗
 					EFloat temp = light->power * dot / (length * dirLeng * 256);
 					sumColorR += temp * light->diffuse.r * baseColor.r;
 					sumColorG += temp * light->diffuse.g * baseColor.g;
@@ -757,12 +689,12 @@ namespace E3D
 				{
 					// 这里当多边形是背朝光源时, 也进行了一些处理, 只是把它的颜色调的
 					// 很暗, 这样才比较协调^___^
+
 					sumColorR += baseColor.r * light->shadowFactor;
 					sumColorG += baseColor.g * light->shadowFactor;
 					sumColorB += baseColor.b * light->shadowFactor;
 				}
 			}
-			//点光源
 			else if (light->lightType == LIGHT_POINT)
 			{
 				// 点光源的光照模型
@@ -771,16 +703,16 @@ namespace E3D
 				//				kc + kl * d + kq * d * d
 				// 其中d = |p-s| 即点光源到多边形的距离
 
-				// 散射光的计算公式
-				// Itotal = Rsdiffuse * Idiffuse * (n * l)
-				// 将他们两个相乘即可
-
-				//多边形到点光源的方向向量
+				// 多边形到点光源的方向向量
 				EVector4D dir = light->transPosition - poly->transformList[0].toVector4D();
 				EFloat dot = n.dotProduct(dir);
 
 				if (dot > 0.0f)
 				{
+					// 散射光的计算公式
+					// Itotal = Rsdiffuse * Idiffuse * (n * l)
+					// 将他们两个相乘即可
+					// 点光源到多边形的距离
 					EFloat dist = dir.length();
 					EFloat atten = light->kc + light->kl * dist + light->kq * dist * dist;
 					EFloat temp = dot / (length * dist * atten * 256);
@@ -788,7 +720,6 @@ namespace E3D
 					sumColorR += light->diffuse.r * baseColor.r * temp;
 					sumColorG += light->diffuse.g * baseColor.g * temp;
 					sumColorB += light->diffuse.b * baseColor.b * temp;
-
 				}
 				else
 				{
@@ -803,6 +734,7 @@ namespace E3D
 
 		if (lightOn)
 		{
+			// 这里再次进行数值检查
 			if (sumColorR > 255) sumColorR = 255;
 			if (sumColorG > 255) sumColorG = 255;
 			if (sumColorB > 255) sumColorB = 255;
@@ -811,10 +743,10 @@ namespace E3D
 		}
 	}
 
-
 	void Light_RenderList4D(ERenderList4D *renderList, EFrustum *camera)
 	{
 		EPolyonF4D *poly = NULL;
+
 		for (ERenderList4D::Itr itr = renderList->polyData.begin();
 			itr != renderList->polyData.end(); ++itr)
 		{
@@ -823,7 +755,107 @@ namespace E3D
 		}
 	}
 
-	// 判断多边形是否在摄像机范围之内
+	
+
+	void Camera_To_Perspective_Object4D(EObject4D *object, EFrustum *camera)
+	{
+		if (!object)
+			return;
+
+		EObject4D *obj = object;
+		EFloat d = camera->view_dist;
+		EFloat temp = 0;
+
+		while (obj)
+		{
+			for (EInt i = 0; i < obj->vertexNumber; i++)
+			{
+				temp = d / obj->transformList[i].z;
+
+				// 变换X, Y轴, Z轴不变换
+				obj->transformList[i].x = temp * obj->transformList[i].x;
+				obj->transformList[i].y = camera->aspect_ratio * temp * obj->transformList[i].y;
+			}
+			obj = obj->nextObject;
+		}
+	}
+
+	
+
+	void Camera_To_Perspective_RenderList4D(ERenderList4D *renderList, EFrustum *camera)
+	{
+		EFloat d = camera->view_dist;
+		EFloat temp = 0;
+		EPolyonF4D *poly = NULL;
+		for (ERenderList4D::Itr itr = renderList->polyData.begin();
+			itr != renderList->polyData.end(); ++itr)
+		{
+			poly = &(*itr);
+
+
+			for (EInt i = 0; i < 3; i++)
+			{
+				temp = d / poly->transformList[i].z;
+				poly->transformList[i].x = temp * poly->transformList[i].x;
+				poly->transformList[i].y = camera->aspect_ratio * temp * poly->transformList[i].y;
+			}
+		}
+	}
+
+	
+
+	void Perspective_To_Screen_Object4D(EObject4D *object, EFrustum *camera)
+	{
+		if (!object)
+			return;
+
+		EFloat XOffset = 0.5f * (camera->viewport_width - 1);
+		EFloat YOffset = 0.5f * (camera->viewport_height - 1);
+
+		EObject4D *obj = object;
+		while (obj)
+		{
+			for (EInt i = 0; i < obj->vertexNumber; i++)
+			{
+				// 在这里, x,y已经被归一化为[-1， 1]的范围之内
+				obj->transformList[i].x = XOffset * (1 + obj->transformList[i].x);
+				obj->transformList[i].y = YOffset * (1 - obj->transformList[i].y);
+			}
+			obj = obj->nextObject;
+		}
+	}
+
+	
+
+	void Perspective_To_Screen_RenderList4D(ERenderList4D *renderList, EFrustum *camera)
+	{
+		EFloat XOffset = 0.5f * (camera->viewport_width - 1);
+		EFloat YOffset = 0.5f * (camera->viewport_height - 1);
+
+		EPolyonF4D *poly = NULL;
+		for (ERenderList4D::Itr itr = renderList->polyData.begin();
+			itr != renderList->polyData.end(); ++itr)
+		{
+			poly = &(*itr);
+
+
+			for (EInt i = 0; i < 3; i++)
+			{
+				poly->transformList[i].x = XOffset * (1 + poly->transformList[i].x);
+				poly->transformList[i].y = YOffset * (1 - poly->transformList[i].y);
+			}
+		}
+	}
+
+	//
+
+
+
+
+
+	
+
+	// 判断此多边形是否在摄像机范围之内
 	EBool isClipped(EPolyonF4D *poly, const EPlane3D &plane)
 	{
 		EInt flag = 0;
@@ -840,6 +872,8 @@ namespace E3D
 			return false;
 	}
 
+	
+
 	EBool isClipped(EPolyonF4D *point, EFloat znear, EFloat zfar)
 	{
 		EInt num = 0;
@@ -855,6 +889,9 @@ namespace E3D
 		return false;
 	}
 
+	
+
+	// 判断此多边形是否在摄像机范围之内
 	EBool isClipped(EPolyonF4D *poly, EFrustum *camera)
 	{
 		EVertex4D v0, v1, v2;
@@ -862,8 +899,8 @@ namespace E3D
 		GetVertex4DMulMatrix44(poly->transformList[1], camera->mWorldToCamera, v1);
 		GetVertex4DMulMatrix44(poly->transformList[2], camera->mWorldToCamera, v2);
 
-		if (camera->clip_z_near > v0.z && camera->clip_z_near > v1.z && camera->clip_z_near > v2.z ||       //近裁剪面
-			camera->clip_z_far < v0.z && camera->clip_z_far > v1.z && camera->clip_z_far > v2.z ||			//远裁剪面
+		if (camera->clip_z_near > v0.z && camera->clip_z_near > v1.z && camera->clip_z_near > v2.z ||		// 近裁剪面
+			camera->clip_z_far < v0.z && camera->clip_z_far < v1.z && camera->clip_z_far < v2.z ||			// 远裁剪面
 			camera->clip_plane_L.normal.dotProduct(v0.toVector4D() - camera->clip_plane_L.point) < 0 &&		// 左裁剪面
 			camera->clip_plane_L.normal.dotProduct(v1.toVector4D() - camera->clip_plane_L.point) < 0 &&
 			camera->clip_plane_L.normal.dotProduct(v2.toVector4D() - camera->clip_plane_L.point) < 0 ||
@@ -879,13 +916,12 @@ namespace E3D
 			camera->clip_plane_B.normal.dotProduct(v0.toVector4D() - camera->clip_plane_B.point) < 0 &&		// 下裁剪面
 			camera->clip_plane_B.normal.dotProduct(v1.toVector4D() - camera->clip_plane_B.point) < 0 &&
 			camera->clip_plane_B.normal.dotProduct(v2.toVector4D() - camera->clip_plane_B.point) < 0)
-		{
 			return true;
-		}
 
 		return false;
 	}
 
+	
 
 	void Clip_RenderList4D(ERenderList4D *renderList, EFrustum *camera)
 	{
@@ -908,7 +944,86 @@ namespace E3D
 		}
 	}
 
+	
 
+	void World_To_Screen_RenderList4D(ERenderList4D *renderList, EFrustum *camera)
+	{
+		EFloat XOffset = 0.5f * (camera->viewport_width - 1);
+		EFloat YOffset = 0.5f * (camera->viewport_height - 1);
+		EFloat dist = camera->view_dist;
+		EFloat temp = 0;
+
+		// 这里对灯光位置进行变换, 将其变换到摄像机坐标系下面
+		EMatrix44 mat = camera->mWorldToCamera;
+		// 这里只保留旋转变换, 而不进行平移变换, 否则会出现灯光跟随摄像机移动的效果
+		mat.m[3][0] = mat.m[3][1] = mat.m[3][2] = 0.0f; mat.m[3][3] = 1.0f;
+
+		ELight *light = NULL;
+		for (LightItr itr = GLights->begin(); itr != GLights->end(); ++itr)
+		{
+			light = *itr;
+			GetVector4DMulMatrix44(light->position, mat, light->transPosition);
+			GetVector4DMulMatrix44(light->direction, mat, light->transDirection);
+		}
+
+		EPolyonF4D *poly = NULL;
+		for (ERenderList4D::Itr itr = renderList->polyData.begin();
+			itr != renderList->polyData.end();)
+		{
+			poly = &(*itr);
+
+			// 首先进行背面消除
+			if (Remove_Backface(poly, camera))
+			{
+				renderList->polyData.erase(itr++);
+				continue;
+			}
+
+			// 世界坐标变摄像机坐标系
+			GetVertex4DMulMatrix44(poly->transformList[0], camera->mWorldToCamera, poly->transformList[0]);
+			GetVertex4DMulMatrix44(poly->transformList[1], camera->mWorldToCamera, poly->transformList[1]);
+			GetVertex4DMulMatrix44(poly->transformList[2], camera->mWorldToCamera, poly->transformList[2]);
+
+			// 进行裁剪
+			if (isClipped(poly, camera->clip_z_near, camera->clip_z_far) ||
+				isClipped(poly, camera->clip_plane_L) ||
+				isClipped(poly, camera->clip_plane_R) ||
+				isClipped(poly, camera->clip_plane_T) ||
+				isClipped(poly, camera->clip_plane_B))
+			{
+				renderList->polyData.erase(itr++);
+				continue;
+			}
+
+			// 如果未被裁减且不是背面则进行光照计算
+			Light_PolyonF4D(poly, camera);
+
+			// 之后执行接下来的变换
+			for (EInt i = 0; i < 3; i++)
+			{
+				// 世界坐标变摄像机坐标系
+				//GetVertex4DMulMatrix44(poly->transformList[i], camera->mWorldToCamera, poly->transformList[i]);
+
+
+				// 透视变换
+				temp = dist / poly->transformList[i].z;
+				poly->transformList[i].x = temp * poly->transformList[i].x;
+				poly->transformList[i].y = camera->aspect_ratio * temp * poly->transformList[i].y;
+
+				// 屏幕变换
+				poly->transformList[i].x = XOffset * (1 + poly->transformList[i].x);
+				poly->transformList[i].y = YOffset * (1 - poly->transformList[i].y);
+			}
+
+			++itr;
+		}
+
+		// 在摄像机坐标系中对渲染列表的多变性进行深度排序
+		// 这里基于这样一个事实, 即虽然X,Y坐标发生了变化, 但是Z坐标依旧是之前摄像机坐标系下的Z值
+		Sort_RenderList4D(renderList);
+	}
+
+	
 	void Draw_Object4D_Wire(EObject4D *object)
 	{
 		if (!object)
@@ -947,6 +1062,7 @@ namespace E3D
 		}
 	}
 
+	
 	void Draw_RenderList4D_Wire(ERenderList4D *renderList)
 	{
 		EPolyonF4D *poly = NULL;
@@ -963,11 +1079,14 @@ namespace E3D
 					poly->transformList[2].x, poly->transformList[2].y, EColor(poly->color));
 			}
 
-			//绘制完毕，这里恢复多边形，清除背面标识
+			// 绘制完毕, 在这里恢复多边形, 清除背面标示
 			poly->state = EPOLY_STATE_ACTIVE;
 		}
+
 		renderList->polyData.clear();
 	}
+
+	
 
 	void Draw_Object4D_Solid(EObject4D *object)
 	{
@@ -993,14 +1112,16 @@ namespace E3D
 						EColor(obj->polyonList[i].color));
 				}
 
-				//绘制完毕，这里恢复多边形，清除背面标识
+				// 绘制完毕, 在这里恢复多边形, 清除背面标示
 				obj->polyonList[i].state = EPOLY_STATE_ACTIVE;
 			}
 
 			obj->state = EOBJECT_STATE_ACTIVE;
-			obj = object->nextObject;
+			obj = obj->nextObject;
 		}
 	}
+
+	
 
 	void Draw_RenderList4D_Solid(ERenderList4D *renderList)
 	{
@@ -1009,17 +1130,22 @@ namespace E3D
 			itr != renderList->polyData.end(); ++itr)
 		{
 			poly = &(*itr);
+
 			{
 				EGraphics::fillTriangle(poly->transformList[0].x, poly->transformList[0].y,
 					poly->transformList[1].x, poly->transformList[1].y,
 					poly->transformList[2].x, poly->transformList[2].y,
 					EColor(poly->color));
 			}
+
 			// 绘制完毕, 在这里恢复多边形, 清除背面标示
 			poly->state = EPOLY_STATE_ACTIVE;
 		}
+
 		renderList->polyData.clear();
 	}
+
+	
 
 	// 绘制平底为下三角的三角形
 	//       v0
@@ -1040,6 +1166,7 @@ namespace E3D
 		EFloat dxdl = (x0 - x1) / (y0 - y1);
 		EFloat dxdr = (x0 - x2) / (y0 - y2);
 
+		//---------
 		EFloat dzdl = (z0 - z1) / (y0 - y1);
 		EFloat dzdr = (z0 - z2) / (y0 - y2);
 
@@ -1056,9 +1183,10 @@ namespace E3D
 			if (y2 > SCREEN_HEIGHT - 1)
 				y2 = SCREEN_HEIGHT - 1;
 
-			//没有纹理 或者 没有贴图 那么使用color 着色
+			// 没有纹理或者没有贴图那么使用color着色
 			for (EFloat y = y0; y < y2; y++)
 			{
+				//DrawLine(startL, y, startR, y, color);
 				begX = startL;
 				endX = startR;
 				if (endX < begX) std::swap(begX, endX);
@@ -1071,12 +1199,13 @@ namespace E3D
 				for (EFloat x = begX; x < endX; x++)
 				{
 					if (EGraphics::checkZ(x, y, z0))
-						EGraphics::setPixel(x, y, color);
+						EGraphics::setPixel(x, y, /*z0, */color);
 				}
 
 				startL += dxdl;
 				startR += dxdr;
 			}
+
 			return;
 		}
 
@@ -1170,7 +1299,6 @@ namespace E3D
 			startRV += dvdr;
 		}
 	}
-
 
 	// 绘制下三角
 	//  v1     v0
@@ -1336,7 +1464,6 @@ namespace E3D
 		EFloat x2 = poly->transformList[2].x, y2 = poly->transformList[2].y, z2 = poly->transformList[2].z;
 		EFloat u2 = poly->transformList[2].u, v2 = poly->transformList[2].v;
 
-		//保证 y0 < y1 < y2
 		// 保证 y0 < y1 < y2
 		if (y1 < y0)
 		{
@@ -1373,8 +1500,10 @@ namespace E3D
 		EFloat newV = v0 + factor * (v2 - v0);
 		Draw_Top_Trangle(x0, y0, z0, u0, v0, x1, y1, z1, u1, v1, newX, y1, newZ, newU, newV, poly->material, EColor(poly->color));
 		Draw_Bottom_Trangle(newX, y1, newZ, newU, newV, x1, y1, z1, u1, v1, x2, y2, z2, u2, v2, poly->material, EColor(poly->color));
+		//}
 	}
 
+	
 
 	void Draw_RenderList4D_Teture_Solid(ERenderList4D * renderList)
 	{
@@ -1393,4 +1522,5 @@ namespace E3D
 		renderList->polyData.clear();
 	}
 
+	
 }
