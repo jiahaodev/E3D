@@ -90,7 +90,7 @@ namespace E3D
 	//½«¸ø¶¨µÄ×Ö·û´®Á½¶ËµÄ¿Õ°××Ö·ûÉ¾³ý
 	inline EString Trim(const EString &msg)
 	{
-		const static EString SPACE_CHAR = "\t\f\v\n\r";
+		const static EString SPACE_CHAR = " \t\f\v\n\r";
 		std::size_t beg = msg.find_first_not_of(SPACE_CHAR);
 
 		if (beg > msg.length())
