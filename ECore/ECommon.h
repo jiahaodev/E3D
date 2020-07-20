@@ -82,8 +82,8 @@ namespace E3D
 		EColor(EInt color, EUChar alpha = 255)
 		{
 			r = (EUChar)((color & 0xff0000) >> 16);
-			g = (EUChar)((color & 0xff0000) >> 8);
-			b = (EUChar)(color & 0xff0000);
+			g = (EUChar)((color & 0x00ff00) >> 8);
+			b = (EUChar)((color & 0x0000ff));
 			a = alpha;
 		}
 		EColor(EUChar ri = 0, EUChar gi = 0, EUChar bi = 0, EUChar ai = 255) :r(ri), g(gi), b(bi), a(ai) {}
