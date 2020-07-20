@@ -75,7 +75,7 @@ namespace E3D
 		BITMAPINFO info = { 0 };
 		info.bmiHeader.biSize = sizeof(info.bmiHeader);
 		info.bmiHeader.biWidth = SCREEN_WIDTH;
-		info.bmiHeader.biHeight = SCREEN_HEIGHT;
+		info.bmiHeader.biHeight = -SCREEN_HEIGHT;//TODO£∫dx‰÷»æ£¨∑¥œÚ
 		info.bmiHeader.biPlanes = 1;
 		info.bmiHeader.biBitCount = 32;
 		info.bmiHeader.biCompression = BI_RGB;
