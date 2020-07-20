@@ -39,7 +39,7 @@ namespace E3D
 #define EPOLY_STATE_BACKFACE       0x0400	//背面状态
 
 #define EOBJECT_STATE_ACTIVE	   0x0001
-#define EOBJECT_STATE_VISABLE	   0x0002
+#define EOBJECT_STATE_VISIBLE	   0x0002
 #define EOBJECT_STATE_CULLED	   0x0004
 
 	//物体剔除类型

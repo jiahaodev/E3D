@@ -75,7 +75,7 @@ namespace E3D
 		}
 
 		//长度的平方
-		inline EFloat squqredLength()const
+		inline EFloat squaredLength()const
 		{
 			return x  *x + y  *y;
 		}
@@ -210,7 +210,7 @@ namespace E3D
 		}
 
 		//长度的平方
-		inline EFloat squqredLength()const
+		inline EFloat squaredLength()const
 		{
 			return x  *x + y  *y + z  *z;
 		}
@@ -350,7 +350,7 @@ namespace E3D
 		}
 
 		//长度的平方
-		inline EFloat squqredLength()const
+		inline EFloat squaredLength()const
 		{
 			return x  *x + y  *y + z  *z;
 		}

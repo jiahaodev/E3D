@@ -26,7 +26,7 @@ namespace E3D
 	template<typename T>
 	const T &Clamp(const T &val, const T &minV, const T &maxV)
 	{
-		return std::max(std::min(val, maxV), minV);
+		return Max(Min(val, maxV), minV);
 	}
 
 	//获取平移变换矩阵
