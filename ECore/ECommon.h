@@ -44,8 +44,8 @@ namespace E3D
 	//默认的名称
 	const EString DEFAULT_NAME = "E3D_Default";
 
-	const EString DEFAULT_PATH = "Media/";
-	static EString GetPath(const EString &file) { return DEFAULT_PATH + file; }
+	const EString DefaultPath = "Media/";
+	static EString GetPath(const EString &file) { return DefaultPath + file; }
 
 	//数学常量
 #define PI 3.141592654f

@@ -103,7 +103,7 @@ namespace E3D
 				{
 					for (EInt k = 0; k < 4; k++)
 					{
-						temp.m[i][j] += m[i][j] * right.m[k][j];
+						temp.m[i][j] += m[i][k] * right.m[k][j];
 					}
 				}
 			}

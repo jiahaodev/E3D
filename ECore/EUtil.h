@@ -91,12 +91,12 @@ namespace E3D
 	inline EString Trim(const EString &msg)
 	{
 		const static EString SPACE_CHAR = "\t\f\v\n\r";
-		std::size_t beg = msg.find_first_of(SPACE_CHAR);
+		std::size_t beg = msg.find_first_not_of(SPACE_CHAR);
 
 		if (beg > msg.length())
 			return EString();
 		EString result = msg.substr(beg);
-		std::size_t end = result.find_last_of(SPACE_CHAR);
+		std::size_t end = result.find_last_not_of(SPACE_CHAR);
 		if (end != EString::npos)
 			end++;
 		

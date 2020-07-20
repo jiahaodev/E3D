@@ -6,7 +6,7 @@
 
 namespace E3D
 {
-	EMaterial::EMaterial() :ambient(0xffff), diffuse(0xffffff), bitmap(NULL) {}
+	EMaterial::EMaterial() :ambient(0xffffff), diffuse(0xffffff), bitmap(NULL) {}
 
 	EMaterial::~EMaterial()
 	{

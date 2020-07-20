@@ -395,7 +395,7 @@ namespace E3D
 		}
 
 		//¸³Öµ
-		inline EVector4D operator = (const EVector4D &right)
+		inline EVector4D& operator = (const EVector4D &right)
 		{
 			x = right.x;
 			y = right.y;
