@@ -106,9 +106,10 @@ namespace E3D
 		//向量取反
 		inline EVector2D operator - ()
 		{
-			x = -x;
-			y = -y;
-			return *this;
+			//x = -x;
+			//y = -y;
+			//return *this;
+			return EVector2D(-x,-y);
 		}
 
 		//向量取正
@@ -240,10 +241,11 @@ namespace E3D
 		//向量取反
 		inline EVector3D operator - ()
 		{
-			x = -x;
-			y = -y;
-			z = -z;
-			return *this;
+			//x = -x;
+			//y = -y;
+			//z = -z;
+			//return *this;
+			return EVector3D(-x,-y,-z);
 		}
 
 		//向量取正

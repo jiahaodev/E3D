@@ -52,7 +52,7 @@ namespace E3D
 		EMaterial();
 		~EMaterial();
 
-		inline bool useTexure() { return bitmap && bitmap->isValid(); }
+		inline bool useTexture() { return bitmap && bitmap->isValid(); }
 
 		EColor getPixel(EFloat u,EFloat v);
 

@@ -107,7 +107,7 @@ namespace E3D
 	}
 
 	// 4D顶点 + 4D向量
-	void GetVertex4DAddVector4D(const EVertex4D &v, const EVector4D &p, EVector4D &result)
+	void GetVertex4DAddVector4D(const EVertex4D &v, const EVector4D &p, EVertex4D &result)
 	{
 		EFloat x = v.x + p.x;
 		EFloat y = v.y + p.y;
@@ -117,7 +117,7 @@ namespace E3D
 	}
 
 	// 4D顶点  *44矩阵
-	void GetVertex4DMulMatrix44(const EVertex4D &vec, const EMatrix44 &mat, EVector4D &result)
+	void GetVertex4DMulMatrix44(const EVertex4D &vec, const EMatrix44 &mat, EVertex4D &result)
 	{
 		EFloat x = vec.x  *mat.m[0][0] + vec.y  *mat.m[1][0] + vec.z  *mat.m[2][0] + mat.m[3][0];
 		EFloat y = vec.x  *mat.m[0][1] + vec.y  *mat.m[1][1] + vec.z  *mat.m[2][1] + mat.m[3][1];

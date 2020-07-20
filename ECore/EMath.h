@@ -54,9 +54,9 @@ namespace E3D
 	void GetVector4DMulMatrix44(const EVector4D &vec, const EMatrix44 &mat, EVector4D &result);
 
 	// 4D顶点 + 4D向量
-	void GetVertex4DAddVector4D(const EVertex4D &v, const EVector4D &p, EVector4D &result);
+	void GetVertex4DAddVector4D(const EVertex4D &v, const EVector4D &p, EVertex4D &result);
 
 	// 4D顶点  *44矩阵
-	void GetVertex4DMulMatrix44(const EVertex4D &v, const EMatrix44 &mat, EVector4D &result);
+	void GetVertex4DMulMatrix44(const EVertex4D &v, const EMatrix44 &mat, EVertex4D &result);
 
 }
